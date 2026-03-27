@@ -5,14 +5,14 @@ import { setJobDescription, setSkills } from '../store/jobSlice'
 import { extractSkills } from '../utils/extractSkills'
 
 const SKILL_COLORS = [
-  'bg-violet-100 text-violet-800 border-violet-200',
-  'bg-blue-100 text-blue-800 border-blue-200',
-  'bg-teal-100 text-teal-800 border-teal-200',
-  'bg-indigo-100 text-indigo-800 border-indigo-200',
-  'bg-purple-100 text-purple-800 border-purple-200',
-  'bg-cyan-100 text-cyan-800 border-cyan-200',
+  'bg-green-100 text-green-800 border-green-200',
   'bg-emerald-100 text-emerald-800 border-emerald-200',
-  'bg-sky-100 text-sky-800 border-sky-200',
+  'bg-teal-100 text-teal-800 border-teal-200',
+  'bg-green-200 text-green-900 border-green-300',
+  'bg-emerald-200 text-emerald-900 border-emerald-300',
+  'bg-teal-100 text-teal-900 border-teal-200',
+  'bg-lime-100 text-lime-800 border-lime-200',
+  'bg-green-50 text-green-700 border-green-200',
 ]
 
 function skillColor(index: number) {
@@ -65,10 +65,10 @@ export default function JobSetup() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/40 to-purple-50/30 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50/40 to-emerald-50/30 py-10 px-4">
       {/* Hero */}
       <div className="max-w-2xl mx-auto mb-8 text-center">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200 mb-4">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg shadow-green-200 mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-7 h-7">
             <path fillRule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75-4.5a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clipRule="evenodd" />
             <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
@@ -84,9 +84,7 @@ export default function JobSetup() {
         {/* JD Card */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-semibold text-gray-800">
-              Job Description
-            </label>
+            <label className="text-sm font-semibold text-gray-800">Job Description</label>
             {jd.length > 0 && (
               <span className="text-xs text-gray-400 tabular-nums">{jd.length.toLocaleString()} chars</span>
             )}
@@ -96,14 +94,14 @@ export default function JobSetup() {
             onChange={(e) => setJd(e.target.value)}
             placeholder="Paste the full job description here — requirements, responsibilities, qualifications…"
             rows={10}
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder-gray-300 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 resize-none transition-all leading-relaxed"
+            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder-gray-300 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100 resize-none transition-all leading-relaxed"
           />
 
           <div className="flex items-center gap-3 flex-wrap">
             <button
               onClick={handleExtract}
               disabled={loading || !jd.trim()}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-200/60 hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-200/60 hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? (
                 <>
@@ -128,11 +126,28 @@ export default function JobSetup() {
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 text-sm text-red-700 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mt-0.5 shrink-0 text-red-500">
-                <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
-              </svg>
-              {error}
+            <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-4 space-y-3">
+              <div className="flex items-start gap-2.5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-red-400 shrink-0 mt-0.5">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
+                </svg>
+                <div>
+                  <p className="text-xs font-semibold text-red-700">Skill extraction failed</p>
+                  <p className="text-xs text-red-500 mt-0.5">
+                    The AI service is temporarily unavailable or overloaded. Please try again in a moment.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={handleExtract}
+                disabled={loading}
+                className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg bg-white border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 hover:border-red-300 disabled:opacity-50 transition-all"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
+                  <path fillRule="evenodd" d="M13.836 2.477a.75.75 0 0 1 .75.75v3.182a.75.75 0 0 1-.75.75h-3.182a.75.75 0 0 1 0-1.5h1.37l-.84-.841a4.5 4.5 0 0 0-7.08.932.75.75 0 0 1-1.3-.75 6 6 0 0 1 9.44-1.242l.842.84V3.227a.75.75 0 0 1 .75-.75Zm-.911 7.5A.75.75 0 0 1 13.199 11a6 6 0 0 1-9.44 1.241l-.84-.84v1.371a.75.75 0 0 1-1.5 0V9.591a.75.75 0 0 1 .75-.75H5.35a.75.75 0 0 1 0 1.5H3.98l.841.841a4.5 4.5 0 0 0 7.08-.932.75.75 0 0 1 1.024-.273Z" clipRule="evenodd" />
+                </svg>
+                Try Again
+              </button>
             </div>
           )}
         </div>
@@ -143,7 +158,7 @@ export default function JobSetup() {
             <div className="flex items-center gap-2">
               <label className="text-sm font-semibold text-gray-800">Required Skills</label>
               {skills.length > 0 && (
-                <span className="inline-flex items-center justify-center h-5 rounded-full bg-indigo-600 text-white text-xs font-bold px-2 min-w-[1.25rem]">
+                <span className="inline-flex items-center justify-center h-5 rounded-full bg-green-600 text-white text-xs font-bold px-2 min-w-[1.25rem]">
                   {skills.length}
                 </span>
               )}
@@ -157,7 +172,7 @@ export default function JobSetup() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6Z" />
                 </svg>
                 <p className="text-sm text-gray-400">
-                  Click <span className="font-semibold text-indigo-500">Extract Skills with AI</span> above, or add skills manually below.
+                  Click <span className="font-semibold text-green-600">Extract Skills with AI</span> above, or add skills manually below.
                 </p>
               </div>
             ) : (
@@ -189,7 +204,7 @@ export default function JobSetup() {
                 onChange={(e) => setNewSkill(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Add a skill manually… (press Enter)"
-                className="flex-1 rounded-xl border border-gray-200 px-4 py-2 text-sm text-gray-900 placeholder-gray-300 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                className="flex-1 rounded-xl border border-gray-200 px-4 py-2 text-sm text-gray-900 placeholder-gray-300 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-100 transition-all"
               />
               <button
                 onClick={addSkill}
