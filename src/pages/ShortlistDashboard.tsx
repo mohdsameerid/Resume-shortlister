@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import type { RootState, AppDispatch } from '../store'
-import { scoreAllCandidates, toggleInterview } from '../store/candidatesSlice'
+import { scoreAllCandidates, scoreOneCandidate, toggleInterview } from '../store/candidatesSlice'
 import type { Candidate } from '../store/candidatesSlice'
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -53,12 +53,12 @@ const bandColors = {
 }
 
 const avatarPalette = [
-  'bg-violet-500',
-  'bg-blue-500',
+  'bg-green-500',
+  'bg-emerald-500',
   'bg-teal-500',
-  'bg-orange-500',
-  'bg-pink-500',
-  'bg-indigo-500',
+  'bg-green-600',
+  'bg-emerald-600',
+  'bg-teal-600',
 ]
 
 function avatarColor(name: string) {
@@ -111,13 +111,9 @@ function ScoreRing({ score, band }: { score: number; band: 'strong' | 'review' |
       <svg className="absolute inset-0 -rotate-90" width="64" height="64" viewBox="0 0 64 64">
         <circle cx="32" cy="32" r={r} fill="none" stroke="#f1f5f9" strokeWidth="5" />
         <circle
-          cx="32"
-          cy="32"
-          r={r}
-          fill="none"
+          cx="32" cy="32" r={r} fill="none"
           stroke={bandColors[band].ring}
-          strokeWidth="5"
-          strokeLinecap="round"
+          strokeWidth="5" strokeLinecap="round"
           strokeDasharray={`${dash} ${circ}`}
           style={{ transition: 'stroke-dasharray 0.6s ease' }}
         />
@@ -136,12 +132,11 @@ function CandidateCard({ candidate, rank }: { candidate: Candidate; rank: number
 
   return (
     <div className={`rounded-2xl border ${bandColors[band].border} ${bandColors[band].bg} bg-white p-5 space-y-4 shadow-sm flex flex-col relative overflow-hidden transition-shadow hover:shadow-md`}>
-      {/* Subtle top accent bar */}
+      {/* Top accent bar */}
       <div className={`absolute top-0 left-0 right-0 h-0.5 ${band === 'strong' ? 'bg-green-400' : band === 'review' ? 'bg-amber-400' : 'bg-red-400'}`} />
 
       {/* Header */}
       <div className="flex items-center gap-3">
-        {/* Rank badge */}
         <div className="shrink-0 flex flex-col items-center">
           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 ${avatarColor(name)}`}>
             {initials(name)}
@@ -160,7 +155,7 @@ function CandidateCard({ candidate, rank }: { candidate: Candidate; rank: number
         </div>
 
         {candidate.status === 'loading' && (
-          <svg className="animate-spin h-5 w-5 text-indigo-400 shrink-0" viewBox="0 0 24 24" fill="none">
+          <svg className="animate-spin h-5 w-5 text-green-400 shrink-0" viewBox="0 0 24 24" fill="none">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
@@ -171,7 +166,7 @@ function CandidateCard({ candidate, rank }: { candidate: Candidate; rank: number
         )}
 
         {candidate.status === 'error' && (
-          <span className="text-xs font-medium text-red-500 bg-red-50 rounded-full px-2 py-1 shrink-0">Error</span>
+          <span className="text-xs font-medium text-red-500 bg-red-50 rounded-full px-2 py-1 shrink-0">Failed</span>
         )}
       </div>
 
@@ -223,7 +218,28 @@ function CandidateCard({ candidate, rank }: { candidate: Candidate; rank: number
       )}
 
       {candidate.status === 'error' && (
-        <p className="text-xs text-red-400 italic">{candidate.error}</p>
+        <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-4 space-y-3">
+          <div className="flex items-start gap-2.5">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-red-400 shrink-0 mt-0.5">
+              <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <p className="text-xs font-semibold text-red-700">Scoring failed</p>
+              <p className="text-xs text-red-500 mt-0.5">
+                The AI service is temporarily unavailable or overloaded. Please try again in a moment.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => dispatch(scoreOneCandidate(candidate.fileName))}
+            className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg bg-white border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 hover:border-red-300 transition-all"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
+              <path fillRule="evenodd" d="M13.836 2.477a.75.75 0 0 1 .75.75v3.182a.75.75 0 0 1-.75.75h-3.182a.75.75 0 0 1 0-1.5h1.37l-.84-.841a4.5 4.5 0 0 0-7.08.932.75.75 0 0 1-1.3-.75 6 6 0 0 1 9.44-1.242l.842.84V3.227a.75.75 0 0 1 .75-.75Zm-.911 7.5A.75.75 0 0 1 13.199 11a6 6 0 0 1-9.44 1.241l-.84-.84v1.371a.75.75 0 0 1-1.5 0V9.591a.75.75 0 0 1 .75-.75H5.35a.75.75 0 0 1 0 1.5H3.98l.841.841a4.5 4.5 0 0 0 7.08-.932.75.75 0 0 1 1.024-.273Z" clipRule="evenodd" />
+            </svg>
+            Re-evaluate
+          </button>
+        </div>
       )}
 
       {/* Interview toggle */}
@@ -235,7 +251,7 @@ function CandidateCard({ candidate, rank }: { candidate: Candidate; rank: number
               'w-full rounded-xl px-3 py-2.5 text-xs font-semibold transition-all flex items-center justify-center gap-1.5',
               candidate.markedForInterview
                 ? 'bg-green-600 text-white hover:bg-green-700 shadow-sm shadow-green-200'
-                : 'bg-gray-50 border border-gray-200 text-gray-500 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700',
+                : 'bg-gray-50 border border-gray-200 text-gray-500 hover:bg-green-50 hover:border-green-200 hover:text-green-700',
             ].join(' ')}
           >
             {candidate.markedForInterview ? (
@@ -314,14 +330,14 @@ export default function ShortlistDashboard() {
     })
   }
 
-  const bandButtons: { label: string; value: Band; color: string }[] = [
-    { label: 'All', value: 'all', color: '' },
-    { label: 'Strong match (80+)', value: 'strong', color: 'text-green-700' },
-    { label: 'Review (50–79)', value: 'review', color: 'text-amber-700' },
+  const bandButtons: { label: string; value: Band }[] = [
+    { label: 'All', value: 'all' },
+    { label: 'Strong match (80+)', value: 'strong' },
+    { label: 'Review (50–79)', value: 'review' },
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/20 to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50/20 to-slate-50">
       {/* Action bar */}
       <div className="bg-white border-b border-gray-100 px-6 py-3 flex items-center gap-3 shadow-sm">
         <div className="flex-1">
@@ -329,7 +345,7 @@ export default function ShortlistDashboard() {
             <p className="text-sm text-gray-400">No resumes loaded — go back and upload some.</p>
           ) : isScoring ? (
             <div className="flex items-center gap-2">
-              <svg className="animate-spin h-4 w-4 text-indigo-500" viewBox="0 0 24 24" fill="none">
+              <svg className="animate-spin h-4 w-4 text-green-500" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
               </svg>
@@ -360,7 +376,7 @@ export default function ShortlistDashboard() {
         {!anyScored && !isScoring && candidates.length > 0 && (
           <button
             onClick={() => dispatch(scoreAllCandidates())}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-indigo-200/60 hover:from-indigo-700 hover:to-violet-700 transition-all"
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-green-200/60 hover:from-green-700 hover:to-emerald-700 transition-all"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
               <path d="M11.983 1.907a.75.75 0 0 0-1.292-.657l-8.5 9.5A.75.75 0 0 0 2.75 12h6.572l-1.305 6.093a.75.75 0 0 0 1.292.657l8.5-9.5A.75.75 0 0 0 17.25 8h-6.572l1.305-6.093Z" />
@@ -370,7 +386,7 @@ export default function ShortlistDashboard() {
         )}
 
         {isScoring && (
-          <div className="inline-flex items-center gap-2 rounded-xl bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-600">
+          <div className="inline-flex items-center gap-2 rounded-xl bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
             <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
@@ -385,13 +401,7 @@ export default function ShortlistDashboard() {
         <div className="bg-white border-b border-gray-100 px-6 py-4">
           <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4">
             <StatCard label="Total Uploaded" value={candidates.length} icon="📄" />
-            <StatCard
-              label="Strong Matches"
-              value={shortlisted}
-              icon="🎯"
-              colorClass="text-green-700"
-              bgClass="bg-green-50"
-            />
+            <StatCard label="Strong Matches" value={shortlisted} icon="🎯" colorClass="text-green-700" bgClass="bg-green-50" />
             <StatCard
               label="Avg Score"
               value={`${avgScore}%`}
@@ -399,13 +409,7 @@ export default function ShortlistDashboard() {
               colorClass={avgScore >= 80 ? 'text-green-700' : avgScore >= 50 ? 'text-amber-700' : 'text-red-600'}
               bgClass={avgScore >= 80 ? 'bg-green-50' : avgScore >= 50 ? 'bg-amber-50' : 'bg-red-50'}
             />
-            <StatCard
-              label="For Interview"
-              value={interviewCount}
-              icon="🗓️"
-              colorClass="text-indigo-700"
-              bgClass="bg-indigo-50"
-            />
+            <StatCard label="For Interview" value={interviewCount} icon="🗓️" colorClass="text-emerald-700" bgClass="bg-emerald-50" />
           </div>
         </div>
       )}
@@ -415,9 +419,7 @@ export default function ShortlistDashboard() {
         {requiredSkills.length > 0 && (
           <aside className="w-56 shrink-0">
             <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm sticky top-20">
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-                Filter by Skill
-              </p>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Filter by Skill</p>
               <div className="space-y-1.5">
                 {requiredSkills.map((skill) => (
                   <label key={skill} className="flex items-center gap-2 cursor-pointer group py-0.5">
@@ -425,7 +427,7 @@ export default function ShortlistDashboard() {
                       type="checkbox"
                       checked={checkedSkills.has(skill)}
                       onChange={() => toggleSkill(skill)}
-                      className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                     />
                     <span className="text-sm text-gray-600 group-hover:text-gray-900 leading-snug transition-colors">
                       {skill}
@@ -436,7 +438,7 @@ export default function ShortlistDashboard() {
               {checkedSkills.size > 0 && (
                 <button
                   onClick={() => setCheckedSkills(new Set())}
-                  className="mt-3 text-xs text-indigo-500 hover:text-indigo-700 font-medium transition-colors"
+                  className="mt-3 text-xs text-green-600 hover:text-green-800 font-medium transition-colors"
                 >
                   Clear filters ({checkedSkills.size})
                 </button>
@@ -457,7 +459,7 @@ export default function ShortlistDashboard() {
                   'rounded-full px-4 py-1.5 text-sm font-medium transition-all',
                   bandFilter === btn.value
                     ? 'bg-gray-900 text-white shadow-sm'
-                    : `bg-white border border-gray-200 ${btn.color || 'text-gray-600'} hover:bg-gray-50`,
+                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50',
                 ].join(' ')}
               >
                 {btn.label}

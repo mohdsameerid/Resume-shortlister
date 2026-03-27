@@ -24,6 +24,31 @@ const initialState: CandidatesState = {
   candidates: [],
 }
 
+// Thunk: re-score a single candidate
+export const scoreOneCandidate = createAsyncThunk<
+  void,
+  string,
+  { state: RootState }
+>('candidates/scoreOne', async (fileName, { getState, dispatch }) => {
+  const { candidates } = getState().candidates
+  const { jobDescription, skills } = getState().job
+  const candidate = candidates.find((c) => c.fileName === fileName)
+  if (!candidate) return
+
+  dispatch(setCandidateStatus({ fileName, status: 'loading' }))
+  try {
+    const result = await scoreResume(candidate.rawText, jobDescription, skills)
+    dispatch(setCandidateScore({ fileName, result }))
+  } catch (err) {
+    dispatch(
+      setCandidateError({
+        fileName,
+        error: err instanceof Error ? err.message : 'Scoring failed',
+      }),
+    )
+  }
+})
+
 // Thunk: score all candidates concurrently
 export const scoreAllCandidates = createAsyncThunk<
   void,

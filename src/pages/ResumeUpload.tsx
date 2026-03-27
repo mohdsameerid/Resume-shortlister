@@ -83,10 +83,10 @@ export default function ResumeUpload() {
   const hasAnyDone = doneCount > 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/40 to-purple-50/30 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50/40 to-emerald-50/30 py-10 px-4">
       {/* Hero */}
       <div className="max-w-2xl mx-auto mb-8 text-center">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-200 mb-4">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg shadow-green-200 mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-7 h-7">
             <path fillRule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.25 6a.75.75 0 0 0-1.5 0v4.94l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V9.75Z" clipRule="evenodd" />
           </svg>
@@ -104,15 +104,15 @@ export default function ResumeUpload() {
           className={[
             'rounded-2xl border-2 border-dashed px-6 py-14 text-center cursor-pointer transition-all duration-200',
             isDragActive
-              ? 'border-indigo-400 bg-indigo-50 scale-[1.01] shadow-lg shadow-indigo-100'
-              : 'border-gray-200 bg-white hover:border-indigo-300 hover:bg-indigo-50/40 shadow-sm',
+              ? 'border-green-400 bg-green-50 scale-[1.01] shadow-lg shadow-green-100'
+              : 'border-gray-200 bg-white hover:border-green-300 hover:bg-green-50/40 shadow-sm',
           ].join(' ')}
         >
           <input {...getInputProps()} />
           <div className={`transition-transform duration-200 ${isDragActive ? 'scale-110' : ''}`}>
-            <div className={`mx-auto w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-colors ${isDragActive ? 'bg-indigo-100' : 'bg-gray-50'}`}>
+            <div className={`mx-auto w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-colors ${isDragActive ? 'bg-green-100' : 'bg-gray-50'}`}>
               <svg
-                className={`h-8 w-8 transition-colors ${isDragActive ? 'text-indigo-500' : 'text-gray-300'}`}
+                className={`h-8 w-8 transition-colors ${isDragActive ? 'text-green-500' : 'text-gray-300'}`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -129,12 +129,12 @@ export default function ResumeUpload() {
           </div>
 
           {isDragActive ? (
-            <p className="text-base font-semibold text-indigo-600">Release to add these PDFs</p>
+            <p className="text-base font-semibold text-green-600">Release to add these PDFs</p>
           ) : (
             <>
               <p className="text-sm font-semibold text-gray-700">
                 Drag & drop PDF files here, or{' '}
-                <span className="text-indigo-600 underline underline-offset-2 decoration-indigo-300">browse files</span>
+                <span className="text-green-600 underline underline-offset-2 decoration-green-300">browse files</span>
               </p>
               <p className="text-xs text-gray-400 mt-2">PDF only · Multiple files supported · 100% local</p>
             </>
@@ -187,7 +187,7 @@ export default function ResumeUpload() {
                     ? 'bg-green-50 text-green-600'
                     : entry.status === 'error'
                     ? 'bg-red-50 text-red-500'
-                    : 'bg-indigo-50 text-indigo-500',
+                    : 'bg-green-50 text-emerald-500',
                 ].join(' ')}>
                   PDF
                 </div>
@@ -198,7 +198,7 @@ export default function ResumeUpload() {
                   <p className="text-xs text-gray-400">
                     {formatBytes(entry.file.size)}
                     {entry.status === 'extracting' && (
-                      <span className="text-indigo-400"> · Extracting text…</span>
+                      <span className="text-green-500"> · Extracting text…</span>
                     )}
                     {entry.status === 'done' && (
                       <span className="text-green-600"> · Ready to score</span>
@@ -212,7 +212,7 @@ export default function ResumeUpload() {
                 {/* Status icon + remove */}
                 <div className="shrink-0 flex items-center gap-2">
                   {entry.status === 'extracting' && (
-                    <svg className="animate-spin h-4 w-4 text-indigo-400" viewBox="0 0 24 24" fill="none">
+                    <svg className="animate-spin h-4 w-4 text-green-400" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                     </svg>
@@ -250,7 +250,7 @@ export default function ResumeUpload() {
             )}
             <button
               onClick={handleStartScoring}
-              className="ml-auto inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-indigo-200/60 hover:from-indigo-700 hover:to-violet-700 transition-all"
+              className="ml-auto inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-green-200/60 hover:from-green-700 hover:to-emerald-700 transition-all"
             >
               Start Scoring ({doneCount} resume{doneCount !== 1 ? 's' : ''})
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
